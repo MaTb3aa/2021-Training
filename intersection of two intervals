@@ -1,0 +1,10 @@
+We can define a solution to this problem in the following way. Assume the input intervals can be defined as Ia=[as,ae] and Ib=[bs,be], while the output interval is defined as Io=[os,oe]. We can find the intersection Io=Ia⋂Ib doing the following:
+
+if ( bs>ae or as>be ) { return ∅ }
+
+else {
+
+os=max(as,bs)
+oe=min(ae,be)
+return [os,oe]
+}
