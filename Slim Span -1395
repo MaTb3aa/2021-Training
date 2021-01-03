@@ -1,0 +1,85 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 300000 + 5, mod = 1e5 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+vector<int>par;
+int find(int u){
+    if(par[u]==u)return u;
+    return par[u]=find(par[u]);
+}
+void link(int u,int v){
+    u =find(u); v=find(v);
+    if(u==v)return ;
+    par[v]=u;
+}
+
+struct Edge {
+    int u, v, weight;
+    bool operator<(Edge const& other) {
+        return weight < other.weight;
+    }
+};
+
+int main() {//IO
+	run();
+	int n,m;
+	        while(cin>>n>>m){
+	            if(!n && !m)break;
+	            par = vector<int>(n);
+	            vector<Edge>g;
+	            for(int i=0;i<m;i++){
+	                int u,v,c;cin>>u>>v>>c;
+	                --u;--v;
+	                g.push_back({u,v,c});
+
+	            }
+	            vector<int>result;
+	            sort(g.begin(), g.end());
+	            int mx=0,mn=1e9,ans=1e9;
+	            for (int i=0;i<m;i++) {
+	                for (int k = 0; k < n; k++)par[k]=k;
+	                result.clear();
+	                mx=0,mn=1e9;
+	                for (int j=i;j<m;j++) {
+	                    if (find(g[j].u) != find(g[j].v)) {
+	                        mn=min(mn, g[j].weight);
+	                        mx=max(mx, g[j].weight);
+	                        result.push_back(g[j].weight);
+	                        link(g[j].u, g[j].v);
+	                    }
+	                }
+	                if(result.size()==n-1){
+	                    ans=min(ans,abs(mx-mn));//cout<<mx<<" "<<mn<<endl;
+	                }
+	            }
+	            if(ans==1e9)ans=-1;
+	            cout<<ans<<endl;
+
+
+
+
+	        }
+
+
+}
