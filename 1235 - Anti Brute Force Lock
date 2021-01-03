@@ -1,0 +1,83 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 300000 + 5, mod = 1e5 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+int par[N];
+void pre(int n){
+	for(int i=0;i<=n;i++)par[i]=i;
+}
+int find(int u){
+    if(par[u]==u)return u;
+    return par[u]=find(par[u]);
+}
+void link(int u,int v){
+    u =find(u); v=find(v);
+    if(u==v)return ;
+    par[v]=u;
+}
+
+struct Edge {
+    int u, v, weight;
+   // Edge(int u,int v,int weight): u(u),v(v),weight(weight){}
+    bool operator<(const Edge& other) const {
+        return weight > other.weight;
+    }
+};
+
+int calc(string a,string b){
+	int sum=0;
+	for(int i=0;i<4;i++){
+		sum += min( abs(a[i] - b[i]), 10 - abs(a[i] - b[i]) );
+	}
+	return sum;
+}
+int main() {//IO
+	run();
+	int t;cin>>t;
+	while(t--){
+		int n;cin>>n;
+		vector<string>v(n);
+		int start=OO;
+		for(auto &t: v){
+			cin>>t;
+			start=min(start,calc("0000",t));
+		}
+		priority_queue<Edge>pr;
+		for(int i=0;i<n;i++){
+			for(int j=i+1;j<n;j++){
+				pr.push({i,j,calc(v[i],v[j])});
+			}
+		}
+		pre(n);
+		ll cost=0;
+		while(!pr.empty()){
+			Edge e = pr.top();pr.pop();
+			if(find(e.u)!=find(e.v)){
+				link(e.u,e.v);
+				cost+=e.weight;
+			}
+		}
+		cout<<cost+start<<endl;
+	}
+}
