@@ -1,5 +1,10 @@
 
-
+void floyed(int n) {
+for (int i = 1; i <= n; i++)arr[i][i] = 0;
+for (int k = 1; k <= n; k++)for (int i = 1; i <= n; i++)for (int j = 1; j <= n; j++)
+	if (arr[i][k] < OO && arr[k][j] < OO)
+		arr[i][j] = min(arr[i][j], arr[i][k] + arr[k][j]);
+}
 // This is memoized in O(n^3)
 
 void floyd1()
