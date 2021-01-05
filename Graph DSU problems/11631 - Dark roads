@@ -1,4 +1,5 @@
-/***  الرحيم الرحمن الله بسم   ***/
+
+Graph DSU problems/***  الرحيم الرحمن الله بسم   ***/
 #include<bits/stdc++.h>
 #define sz(s)               (int)s.size()
 #define mem(x,y)    memset(x,y,sizeof(x))
