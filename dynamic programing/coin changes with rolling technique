@@ -1,0 +1,104 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// coin change
+
+int coins [] = {5,10,20,50,100,200,500,1000,2000,5000,10000};
+
+
+/*
+// first method
+int solve(int i,int rem){
+	if(!rem)return 1;
+	if(coins[i]>rem || i==11)return 0;
+	int ret=0;
+	ret=solve(i+1,rem);
+	while(rem-coins[i]>=0){
+		ret+=solve(i+1,rem-coins[i]);
+		rem-=coins[i];
+	}
+	return ret;
+}
+*/
+
+/* second method
+ * int solve(int i,int rem){
+	if(!rem)return 1;
+	if(coins[i]>rem || i==11)return 0;
+	int ret=0;
+	ret=solve(i+1,rem);
+	ret+=solve(i,rem-coins[i]);
+	return ret;
+}
+*/
+
+
+long long mem[12][30005];
+long long roll[2][30004];
+int main(){
+	int x;cin>>x;
+
+
+/*	third method
+	for(int i=0;i<11;i++)
+		mem[i][0]=1;
+
+	for(int rem=coins[0];rem<=x;rem+=5){
+		for(int i=0;i<11;i++){
+			if(i)
+				mem[i][rem]=mem[i-1][rem];
+			if(rem>=coins[i])
+				mem[i][rem]+=mem[i][rem-coins[i]];
+		}
+	}
+	cout<<mem[10][x]<<endl;
+	*/
+
+
+	// now we need to swap loops to implement rolling technique
+
+	/*
+	for(int i=0;i<11;i++)mem[i][0]=1;
+
+		for(int i=0;i<11;i++){
+			for(int rem=coins[0];rem<=x;rem+=5){
+				if(i)
+					mem[i][rem]=mem[i-1][rem];
+				if(rem>=coins[i])
+					mem[i][rem]+=mem[i][rem-coins[i]];
+			}
+		}
+		cout<<mem[10][x]<<endl;
+*/
+/*
+ * rolling technique ^^
+ * to implement it try to make first loop is idx loop (p - !P)  
+	int p=0;
+	roll[p][0]=roll[!p][0]=1;
+
+	for(int i=0;i<11;i++){
+		p=!p;
+		for(int rem=coins[0];rem<=x;rem+=5){
+			roll[p][rem]=0; // this is a new state we need to calc it and remove last iterations
+
+			if(i)roll[p][rem]=roll[!p][rem];
+			roll[p][rem]+=roll[p][rem-coins[i]];
+
+		}
+	}
+	cout<<max(roll[p][x],roll[!p][x])<<endl;
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}
