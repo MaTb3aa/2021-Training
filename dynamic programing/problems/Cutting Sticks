@@ -1,0 +1,52 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 300000 + 5, mod = 1e5 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+vector<int>cuts;
+ll dp[55][55];
+ll solve(int i,int j,int l,int r){
+	if(i<0 || j>=sz(cuts) || i>j)return 0;
+	if(i==j)return r-l;
+	ll &ret=dp[i][j];
+	if(~ret)return ret;
+	ret=OO;
+	for(int k=i;k<=j;k++){
+		ret=min(ret,(r-l)+solve(i,k-1,l,cuts[k])+solve(k+1,j,cuts[k],r));
+	}
+	return ret;
+}
+int main() {//IO
+	run();
+	int L,n;
+	while(cin>>L>>n){
+		if(!L)break;
+		cuts=vector<int>(n);
+		for(auto &t : cuts)cin>>t;
+		mem(dp,-1);
+		cout<<"The minimum cutting is "<<solve(0,n-1,0,L)<<".\n";
+	}
+
+
+
+}
