@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// Nested Range
+
+/*
+ *
+ * almost you should look from top to down not (bottom up)
+ *
+ * abcdef
+ * (a(bc))((de)f) ....
+ */
+int weight[105];
+int solve(int i,int j){
+	if(j-i+1==2)return 0;
+	if(j-i+1==3)return weight[i]*weight[j];
+
+	int ret=0;
+	for(int k=i+1;k<j;k++){
+		ret=max(ret,solve(i+1,k)+solve(k,j+1)+weight[i]*weight[j]);
+	}
+	return ret;
+}
+int main(){
+
+
+
+}
