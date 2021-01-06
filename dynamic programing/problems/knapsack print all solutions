@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e3+5, M = 1e4, OO = 0x3f3f3f3f;
+
+int n, W[N], P[N], k;
+int mem[N][N];
+
+int solve(int i = n-1, int rem = k){
+	if(rem < 0)	return -OO;
+	if(i == -1)	return 0;
+	int & ret = mem[i][rem];
+	if(~ret)	return ret;
+	ret = solve(i-1, rem);
+	ret = max(ret, solve(i-1, rem-W[i])+P[i]);
+	return ret;
+}
+
+void print(int i = n-1, int rem = k){
+	if(i == -1)	return;
+	int ret = solve(i, rem);
+	if(ret == solve(i-1, rem-W[i])+P[i]){
+		printf("%d ", i+1);
+		print(i-1, rem-W[i]);
+		return;
+	}
+	print(i-1, rem);
+}
+
+vector<int> ans;
+
+void printAll(int i = n-1, int rem = k){
+	if(i == -1){
+		for(int x : ans)	printf("%d ", x);
+		puts("");
+		return;
+	}
+	int ret = solve(i, rem);
+	if(ret == solve(i-1, rem-W[i])+P[i]){
+		ans.push_back(P[i]);
+		printAll(i-1, rem-W[i]);
+		ans.pop_back();
+	}
+	if(ret == solve(i-1, rem)){
+		printAll(i-1, rem);
+	}
+}
+
+int main(){
+	scanf("%d %d", &k, &n);
+	memset(mem, -1, sizeof mem);
+	for(int i = 0 ; i < n ; ++i)	scanf("%d %d", P+i, W+i);
+	solve();
+	printAll();
+	return 0;
+}
