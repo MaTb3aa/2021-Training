@@ -1,0 +1,66 @@
+/***  بسم الله الرحمن ا لرحيم   ***/
+#define _CRT_SECURE_NO_WARNINGS
+#include<bits/stdc++.h>
+//#include<unordered_map>
+#define endl                         '\n'	
+#define Ceil(x,y)             ((x+y-1)/y)
+#define sz(s)               (int)s.size()
+#define RT(x)           return cout<<x,0;
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define watch(x) cout<<(#x)<<" = "<<x<<endl
+int dx[] = { 0, 0, 1, -1, 1, -1, 1, -1 };
+int dy[] = { 1, -1, 0, 0, -1, 1, 1, -1 };
+const double PI = acos(-1), EPS = 1e-7;
+const int OO = 0x3f3f3f3f, N = 2e5 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+ll gcd(ll x, ll y) { return (!y) ? x : gcd(y, x % y); }
+ll lcm(ll x, ll y) { return ((x / gcd(x, y)) * y); }
+void file() {
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	//freopen("output.txt", "w", stdout);
+#endif  !ONLINEJUDGE
+	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+}
+string s;
+int dp[N][4][3];
+int solve(int idx, int rem,bool take) {
+	if (idx == sz(s)) {
+		if (rem  == 0)return 0;
+		return OO;
+	}
+	int& ret = dp[idx][rem][take];
+	if (~ret)return ret; ret = OO;
+	ret = min(ret,solve(idx + 1, rem, take) + 1);
+	if (take || s[idx] != '0')
+		ret = min(ret, solve(idx + 1, (rem + (s[idx] - '0')) % 3, 1));
+	return ret;	
+}
+string d = "";
+void print(int idx, int rem, bool take) {
+	if (idx == sz(s)) return;
+	int op = solve(idx, rem, take);
+	if (take || s[idx] != '0') {
+		if (op == solve(idx + 1, (rem + (s[idx] - '0')) % 3, 1)) {
+			d += s[idx];
+			print(idx + 1, (rem + (s[idx] - '0')) % 3, 1);
+			return;
+		}
+	}
+	print(idx + 1, rem , take);
+}
+int main() {
+	file();
+	cin >> s;
+	bool k = 0;
+	for (auto t : s)if (t == '0')k = 1;
+	mem(dp, -1);
+	if (solve(0, 0, 0) == sz(s)) {
+		if (k)RT(0);
+		RT(-1);
+	}
+	print(0, 0,0);
+	cout << d;
+}
