@@ -1,0 +1,74 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 100000 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+/*
+ * -Please take 2 minute to find tricky test^^
+1- Read all test cases before typing code
+2- check data types
+3- write TLE code then optimize it
+4- get WR-> take example and analysis it
+5- valid input ..data swap
+6- dp ret minval or maxval and memo is exist
+ */
+
+string s;
+int id;
+int dp[1001][1001],vis[1001][1001],visB[1001][1001];
+string dpB[1001][1001];
+int solve(int i,int j){
+	if(i==j)return 1;
+	if(i>j)return 0;
+	int &ret=dp[i][j];
+	if(vis[i][j]==id)return ret;
+	vis[i][j]=id;
+	ret=0;
+	if(s[i]==s[j])ret=solve(i+1,j-1)+2;
+	ret=max(ret,solve(i+1,j));
+	ret=max(ret,solve(i,j-1));
+	return ret;
+}
+string build(int i,int j){
+	if(i==j)return string(1,s[i]);
+	if(i>j)return "";
+	string &ret=dpB[i][j];
+	if(visB[i][j]==id)return ret;
+	visB[i][j]=id;
+	ret.clear();
+	if(s[i]==s[j])
+		return ret=s[i]+build(i+1,j-1)+s[j];
+	int ch1=solve(i+1,j),ch2=solve(i,j-1);
+	int mx=max(ch1,ch2);
+	if(ch1==ch2)return ret=min(build(i+1,j),build(i,j-1));
+	if(ch1==mx)return ret=build(i+1,j);
+	else return ret=build(i,j-1);
+}
+int main() {//IO
+	run();
+	while(cin>>s){
+		id++;
+		cout<<build(0,sz(s)-1)<<endl;
+	}
+}
