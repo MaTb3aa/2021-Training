@@ -1,0 +1,66 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 100000 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+/*
+ * -Please take 2 minute to find tricky test^^
+1- Read all test cases before typing code
+2- check data types
+3- write TLE code then optimize it
+4- get WR-> take example and analysis it
+5- valid input ..data swap
+6- dp ret minval or maxval and memo is exist
+ */
+
+string s;
+int id;
+pair<int,string>dp[1001][1001];
+
+pair<int,string>best(pair<int,string>a,pair<int,string>b){
+	if(a.first>b.first)return a;
+	if(b.first>a.first)return b;
+	if(a.second<b.second)return a;
+	return b;
+}
+
+pair<int,string> build(int i,int j){
+	if(i==j)return {1,string(1,s[i])};
+	if(i>j)return {0,""};
+	if(dp[i][j].first!=-1)return dp[i][j];
+	pair<int,string>ret;
+	if(s[i]==s[j]){
+		ret.first=build(i+1,j-1).first+2;
+		ret.second=s[i]+build(i+1,j-1).second+s[j];
+	}
+	else ret=best(build(i+1,j),build(i,j-1));
+	return ret;
+}
+int main() {//IO
+	run();
+	while(cin>>s){
+		for(int i=0;i<sz(s);i++)for (int j = 0; j < sz(s); ++j) dp[i][j].first=-1;
+		cout<<build(0,sz(s)-1).second<<endl;
+	}
+}
