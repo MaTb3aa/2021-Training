@@ -55,7 +55,7 @@ pair<int,string> build(int i,int j){
 		ret.second=s[i]+build(i+1,j-1).second+s[j];
 	}
 	else ret=best(build(i+1,j),build(i,j-1));
-	return ret;
+	return dp[i][j]=ret;
 }
 int main() {//IO
 	run();
