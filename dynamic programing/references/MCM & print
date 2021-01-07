@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+const int N = 1e2+5, M = 1e4, OO = 0x3f3f3f3f;
+
+int n;
+long long R[N], C[N];
+long long mem[N][N];
+
+long long solve(int l = 0, int r = n-1){
+	if(l == r)	return 0;
+	long long & ret = mem[l][r];
+	if(~ret)	return ret;
+	ret = OO;
+	for(int mid = l ; mid < r ; ++mid){
+		ret = min(ret, solve(l, mid)+solve(mid+1, r)+R[l]*C[r]*C[mid]);
+	}
+	return ret;
+}
+
+void print(int l = 0, int r = n-1){
+	if(l == r){
+		printf("%c", char('A'+l));
+		return;
+	}
+	long long ret = solve(l, r);
+	printf("(");
+	for(int mid = l ; mid < r ; ++mid){
+	 if(ret ==  solve(l, mid)+solve(mid+1, r)+R[l]*C[r]*C[mid]){
+	 	print(l, mid);
+	 	printf("*");
+	 	print(mid+1, r);
+	 	break;
+	 }
+	}
+ 	printf(")");
+}
+
+int main(){
+	scanf("%d", &n);
+	for(int i = 0 ; i < n ; ++i)	scanf("%lld %lld", R+i, C+i);
+	memset(mem, -1, sizeof mem);
+	printf("%lld\n", solve());
+	print();
+	puts("");
+	return 0;
+}
