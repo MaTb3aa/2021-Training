@@ -1,1 +1,83 @@
-497 - Strategic Defense Initiative
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 5000 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+/*
+ * -Please take 2 minute to find tricky test^^
+1- Read all test cases before typing code
+2- check data types
+3- write TLE code then optimize it
+4- get WR-> take example and analysis it
+5- valid input ..data swap
+6- dp ret minval or maxval and memo is exist
+ */
+int dp[3005][3005],vis[3005][3004];
+vector<int>a;
+int n,id;
+int solve(int i,int lst){
+	if(i==n)return 0;
+	int &ret=dp[i][lst];
+	if(vis[i][lst]==id)return ret;
+	vis[i][lst]=id;
+	ret=0;
+	ret=max(ret,solve(i+1,lst));
+	if(a[i]>a[lst])ret=max(ret,solve(i+1,i)+1);
+	return ret;
+}
+void print(int i,int lst){
+	if(i==n)return ;
+
+	int ret=solve(i,lst);
+	if(ret==solve(i+1,i)+1){
+		cout<<a[i]<<"\n";
+		print(i+1,i);
+		return;
+	}
+	print(i+1,lst);
+}
+int main() {//IO
+	run();
+	int t;cin>>t;
+	cin.ignore();
+	cin.ignore();
+	mem(dp,-1);
+	string end="";
+	while(t--){
+		string s;
+		a.clear();
+		while(getline(cin,s) && s!=""){
+			stringstream ss(s);
+			int x;ss>>x;
+			a.push_back(x);
+		}
+		n=sz(a);
+		a.push_back(-OO);
+		id++;
+		cout<<end<<"Max hits: "<<solve(0,n)<<endl;
+		print(0,n);
+		end="\n";
+
+	}
+}
