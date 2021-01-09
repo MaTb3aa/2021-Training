@@ -1,0 +1,78 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 5000 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+/*
+ * -Please take 2 minute to find tricky test^^
+1- Read all test cases before typing code
+2- check data types
+3- write TLE code then optimize it
+4- get WR-> take example and analysis it
+5- valid input ..data swap
+6- dp ret minval or maxval and memo is exist
+ */
+int t,w,n;
+vector<pair<ll,ll>>v;
+vector<int>ans;
+ll dp[33][1005];
+ll solve(int i,int rem){
+	if(rem<0)return -OO;
+	if(i==n)return 0;
+	ll &ret=dp[i][rem];
+	if(~ret)return ret;
+	ret=0;
+	ret=max(ret,solve(i+1,rem));
+	ret=max(ret,solve(i+1,rem-(w*v[i].first + 2*w*v[i].first)) +v[i].second);
+	return ret;
+}
+void print(int i,int rem){
+	if(rem<0)return ;
+	if(i==n)return ;
+	ll ret=solve(i,rem);
+	if(ret==solve(i+1,rem-(w*v[i].first + 2*w*v[i].first)) +v[i].second){
+		ans.push_back(i);
+		print(i+1,rem-(w*v[i].first + 2*w*v[i].first));
+		return ;
+	}
+	print(i+1,rem);
+}
+int main() {//IO
+	run();
+	bool ok=0;
+	while(cin>>t>>w){
+		if(ok)cout<<endl;
+		cin>>n;
+		v=vector<pair<ll,ll>>(n);
+		ans.clear();
+		for(auto &t: v)cin>>t.first>>t.second;
+		mem(dp,-1);
+		cout<<solve(0,t)<<endl;
+		print(0,t);
+		cout<<sz(ans)<<endl;
+		for(auto t: ans)cout<<v[t].first<<" "<<v[t].second<<endl;
+		ok=1;
+	}
+
+}
