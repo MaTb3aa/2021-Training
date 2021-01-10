@@ -25,6 +25,7 @@ void run() {
 
 ll vis[1000005];
 int main() {
+// https://atcoder.jp/contests/abc188/tasks/abc188_d
 	run();
 	ll n,C;
 	cin>>n>>C;
