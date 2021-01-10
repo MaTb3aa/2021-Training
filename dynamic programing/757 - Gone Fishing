@@ -1,0 +1,101 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define IO ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 1000000 + 5, mod = 1e9 + 7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+
+int n,h,id;
+int fish[30],t[30],d[30];
+ll dp[30][1001][1001];
+int vis[30][1001][1001];
+ll solve(int i,int times,int rem){
+	if(rem<0)return -1e18;
+	if(rem==0)return 0;
+	if(i==n)return 0;
+	ll &ret=dp[i][times][rem];
+	if(vis[i][times][rem]==id)return ret;
+	vis[i][times][rem]=id;
+	ret=0;
+	ret=max(ret, solve(i+1,0,rem-(5*t[i])));
+	ret=max(ret,solve(i,times+1,rem-5)+max(0,fish[i]-(d[i]*times)));
+	return ret;
+}
+map<int,int>mp;
+vector<int>v;
+void print(int i,int times,int rem){
+	if(rem<0){
+		return ;
+	}
+	if(!rem){
+		v[i+1]=(times*5);
+		return ;
+	}
+	if(i==n)return ;
+
+
+	ll ret=solve(i,times,rem);
+
+	ll ch1=solve(i,times+1,rem-5)+max(0,fish[i]-(d[i]*times));
+	ll ch2=solve(i+1,0,rem-(5*t[i]));
+	if(ret==ch1){
+		v[i+1]=(times*5);
+		print(i,times+1,rem-5);
+		return ;
+	}
+	else if(ret==ch2){
+		v[i+1]=(times*5);
+		print(i+1,0,rem-(5*t[i]));
+		return ;
+	}
+}
+int main() {//IO
+	run();
+	bool k=0;
+	while(cin>>n &&n){
+		id++;
+		v=vector<int>(n+1);
+		if(k)cout<<endl;
+		cin>>h;
+		for (int i = 0; i < n; ++i) {
+			cin>>fish[i];
+		}
+		for (int i = 0; i < n; ++i) {
+			cin>>d[i];
+		}
+		for (int i = 0; i < n-1; ++i) {
+			cin>>t[i];
+		}
+		print(0,0,60*h);
+		for (int i = 1; i <= n; ++i) {
+			cout<<v[i];
+			if(i<n) cout<<", ";
+
+		}
+		cout<<endl;
+		cout<<"Number of fish expected: "<<solve(0,0,60*h)<<endl;
+		k=1;
+	}
+
+
+}
