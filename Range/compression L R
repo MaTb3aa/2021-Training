@@ -1,0 +1,60 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+const int OO = 0x3f3f3f3f, N = 1000000 + 5, mod = 1e9+7;
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+ll vis[1000005];
+int main() {
+	run();
+	ll n,C;
+	cin>>n>>C;
+	vector<int>a(n),b(n),v;
+	vector<ll>c(n);
+	for (int i = 0; i < n; ++i) {
+		cin>>a[i]>>b[i]>>c[i];
+		v.push_back(a[i]);
+		v.push_back(b[i]+1);
+	}
+	sort(all(v));
+	v.erase(unique(all(v)),v.end());
+	for (int i = 0; i < n; ++i) {
+		a[i]=lower_bound(all(v),a[i])-v.begin();
+		b[i]=lower_bound(all(v),b[i]+1)-v.begin();
+	}
+	for (int i = 0; i < n; ++i) {
+		vis[a[i]]+=c[i];
+		vis[b[i]]-=c[i];
+	}
+	for (int i = 1; i < N ; ++i) {
+		vis[i]+=vis[i-1];
+	}
+	ll sum=0;
+	for (int i = 0; i < sz(v); ++i) {
+		ll len =v[i+1]-v[i];
+		sum+=min(C,vis[i])*len;
+	}
+	cout<<sum<<endl;
+
+
+
+}
