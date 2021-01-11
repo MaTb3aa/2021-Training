@@ -1,0 +1,72 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+vector<pair<int,int>>v;
+
+bool ok(int i,int j){
+	return v[i].second==v[j].first;
+}
+int n,m;
+
+int dp[14][16][1<<14];
+int solve(int i,int lst,int mask){
+	if(i==n){
+		return ok(lst,m+1);
+	}
+	if(mask==(1<<m)-1)return 0;
+	int &ret=dp[i][lst][mask];
+	if(~ret)return ret;
+	ret=0;
+	for (int j = 1; j <= m; ++j) {
+		if(!(mask&(1<<j)) && ok(lst,j)){
+			ret=max(ret,solve(i+1,j,mask|(1<<j)));
+		}
+		swap(v[j].first,v[j].second);
+		if(!(mask&(1<<j)) && ok(lst,j)){
+			ret=max(ret,solve(i+1,j,mask|(1<<j)));
+		}
+		swap(v[j].first,v[j].second);
+	}
+	return ret;
+}
+int main() {
+	run();
+	while(cin>>n && n){
+		cin>>m;
+		v=vector<pair<int,int>>(m+2);
+		cin>>v[0].first>>v[0].second;
+		cin>>v[m+1].first>>v[m+1].second;
+		for (int i = 1; i <= m; ++i) {
+			cin>>v[i].first>>v[i].second;
+		}
+		mem(dp,-1);
+		if(solve(0,0,0))cout<<"YES\n";
+		else cout<<"NO\n";
+
+	}
+}
