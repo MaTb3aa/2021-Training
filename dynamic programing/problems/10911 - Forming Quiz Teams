@@ -1,0 +1,69 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+vector<pair<ll,ll>>v;
+double dis(int i,int j){
+	return sqrt((v[i].first - v[j].first) *(v[i].first - v[j].first) +
+			(v[i].second - v[j].second) *(v[i].second - v[j].second) );
+}
+int n;
+double dp[1<<16];
+
+double solve(int mask){
+	if(!mask)return 0;
+	double &ret=dp[mask];
+	if(ret!=0)return ret;
+	ret=OO;
+	for (int i = 0; i < n; ++i) 
+		for (int j = 0; j < n; ++j) {
+			if(i==j)continue;
+			if( (mask&(1<<i) ) &&(mask&(1<<j) ) ){
+				int nmask = mask &(~(1<<i)) & (~(1<<j));
+				
+				ret=min(ret,solve(nmask)+dis(i,j));
+			}
+		}
+	
+	return ret;
+}
+int tt=1;
+int main() {
+	run();
+	while(cin>>n && n){
+		n*=2;
+		v=vector<pair<ll,ll>>(n);
+		for(auto &t: v){
+			string s;cin>>s;
+			cin>>t.first>>t.second;
+		}
+		mem(dp,0);
+		cout<<fixed<<setprecision(2);
+		cout<<"Case "<<tt++<<": "<<solve((1<<n)-1)<<endl;
+	}
+
+}
