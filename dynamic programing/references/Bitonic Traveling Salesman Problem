@@ -1,0 +1,47 @@
+
+/*
+
+  Remember that all vertices have been sorted by x-coordinates (and if tie, by y-coordinates).
+  We can then consider the vertices one by one. Both LR and RL paths start from vertex
+  0. Let v be the next vertex to be considered. For each vertex v ∈ [1 ...n − 2], we decide
+  whether to add vertex v as the next point of the LR path (to extend the LR path further to
+  the right) or as the previous point the returning RL path (the RL path now starts at v and
+  goes back to vertex 0). For this, we need to keep track of two more parameters: p1 and p2.
+  Let p1/p2 be the current ending/starting vertex of the LR/RL path, respectively.
+  The base case is when vertex v = n − 1 where we just need to connect the two LR and
+  RL paths with vertex n − 1.
+  With these observations in mind, we can write a simple DP solution is like this:
+
+
+*/
+double dp1(int v, int p1, int p2) { // called with dp1(1, 0, 0)
+if (v == n-1)
+return d[p1][v] + d[v][p2];
+if (memo3d[v][p1][p2] > -0.5)
+return memo3d[v][p1][p2];
+return memo3d[v][p1][p2] = min(
+d[p1][v] + dp1(v+1, v, p2), // extend LR path: p1->v, RL stays: p2
+d[v][p2] + dp1(v+1, p1, v)); // LR stays: p1, extend RL path: p2<-v
+}
+
+/*
+
+However, the time complexity of dp1 with three parameters: (v, p1, p2) is O(n3). This is
+not efficient, as parameter v can be dropped and recovered from 1+max(p1, p2) (see this DP
+optimization technique of dropping one parameter and recovering it from other parameters
+as shown in Section 8.3.6). The improved DP solution is shown below and runs in O(n2).
+
+
+*/
+
+
+double dp2(int p1, int p2) { // called with dp2(0, 0)
+int v = 1 + max(p1, p2); // this single line speeds up Bitonic TSP tour
+if (v == n-1)
+return d[p1][v] + d[v][p2];
+if (memo2d[p1][p2] > -0.5)
+return memo2d[p1][p2];
+return memo2d[p1][p2] = min(
+d[p1][v] + dp2(v, p2), // extend LR path: p1->v, RL stays: p2
+d[v][p2] + dp2(p1, v)); // LR stays: p1, extend RL path: p2<-v
+}
