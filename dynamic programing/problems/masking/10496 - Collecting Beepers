@@ -1,0 +1,69 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = 19*19+2 + 5, M = 2e5 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+ // __builtin_popcount
+int dis(pair<int,int>a,pair<int,int>b){
+	return (abs(a.first-b.first)+abs(a.second-b.second) );
+}
+pair<int,int>st;
+int n,m,sz;
+vector<pair<int,int>>node;
+int dp[21][1<<21];
+int solve(int lst,int mask){
+	if(__builtin_popcount(mask)==sz)return dis(node[lst],node[0]);
+	int &ret=dp[lst][mask];
+	if(~ret)return ret;
+	ret=OO;
+	for (int i = 1; i <= sz; ++i) {
+		if(!(mask&(1<<i))){
+			ret=min(ret,solve(i,mask|(1<<i))+dis(node[lst],node[i]));
+		}
+	}
+
+	return ret;
+}
+int main() {
+	run();
+	int t;
+	cin>>t;
+	while(t--){
+		cin>>n>>m;
+		cin>>st.first>>st.second;
+		cin>>sz;
+		node = vector<pair<int,int>>(sz);
+		node[0]=st;
+		for (int i = 1; i <= sz; ++i) {
+			cin>>node[i].first>>node[i].second;
+		}
+		mem(dp,-1);
+		cout<<"The shortest path has length "<<solve(0,0)<<endl;
+
+
+	}
+
+}
