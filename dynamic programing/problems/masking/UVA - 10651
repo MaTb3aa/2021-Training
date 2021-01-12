@@ -1,0 +1,74 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = (1<<12) + 5, M = 2e5 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+ // __builtin_popcount
+
+int dp[1<<20];
+int n;
+int solve(bitset<N>bt){
+	if(bt.count()<2)return 0;
+	int &ret=dp[bt.to_ullong()];
+	if(~ret)return ret;
+	ret=0;
+
+	for (int i = 0; i < n-2; ++i) {
+		if(!bt[i] && bt[i+1] && bt[i+2]){
+			bitset<N>mask=bt;
+			mask[i+2]=0;
+			mask[i+1]=0;
+			mask[i]=1;
+			ret=max(ret,solve(mask.to_ullong())+1);
+		}
+		if(bt[i] && bt[i+1] && !bt[i+2]){
+			bitset<N>mask=bt;
+			mask[i+2]=1;
+			mask[i+1]=0;
+			mask[i]=0;
+			ret=max(ret,solve(mask.to_ullong())+1);
+		}
+	}
+	return ret;
+}
+int main() {
+	run();
+	int t;
+	cin>>t;
+	while(t--){
+		string s;
+		cin>>s;
+		n=sz(s);
+		bitset<N>bt;
+		for (int i = 0; i < n; ++i) {
+			if(s[i]=='o')bt[i]=1;
+		}
+		mem(dp,-1);
+
+		cout<<bt.count()-solve(bt)<<endl;
+	}
+
+}
