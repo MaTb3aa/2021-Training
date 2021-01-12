@@ -1,0 +1,81 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = (1<<16) + 5, M = 2e5 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+ // __builtin_popcount
+
+int n;
+ll dp[N];
+int a[16][16];
+vector<int>Masks[N];
+ll cost[N];
+void brute(int i,int mask,int sub){
+	if(i==n){
+		if(__builtin_popcount(sub)==0)return ;
+		Masks[mask].push_back(sub);
+		return ;
+	}
+	brute(i+1,mask,sub);
+	brute(i+1,mask|(1<<i),sub);
+	brute(i+1,mask|(1<<i),sub|(1<<i));
+
+}
+void pre(){
+	for (int mask = 1; mask < (1<<n); ++mask) {
+
+		for (int j = 0; j < n; ++j) {
+			if(!(mask&(1<<j)))continue;
+			for (int k = j+1; k < n; ++k) {
+				if(!(mask&(1<<k)))continue;
+				cost[mask]+=a[j][k];
+			}
+		}
+	}
+}
+ll solve(int mask){
+	if(__builtin_popcount(mask)==0)return 0;
+	ll &ret=dp[mask];
+	if(~ret)return ret;
+	ret=-1e18;
+	for(auto sub : Masks[mask]){
+		ret=max(ret,solve(mask^sub)+cost[sub]);
+	}
+	return ret;
+}
+int main() {
+	run();
+	cin >> n;
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < n; ++j) {
+			cin>>a[i][j];
+		}
+	}
+	brute(0,0,0);
+	pre();
+	mem(dp,-1);
+	cout<<solve((1<<n)-1);
+}
