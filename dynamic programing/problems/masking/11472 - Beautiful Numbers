@@ -1,0 +1,68 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = (1<<12) + 5, M = 2e5 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+ // __builtin_popcount
+int n,m;
+int dp[105][10][(1<<11)];
+int solve(int i,int lst,int mask){
+	if(i==m){
+		return __builtin_popcount(mask)==n;
+	}
+	int &ret=dp[i][lst][mask];
+	if(~ret)return ret;
+	ret=0;
+	if(__builtin_popcount(mask)==n)
+		ret++;
+	for (int dig = 0; dig < n; ++dig) {
+		if(abs(dig-lst)==1)
+			ret+=solve(i+1,dig,mask|(1<<dig))%mod;
+		if(ret>=mod)
+			ret-=mod;
+	}
+	return ret;
+}
+int main() {
+	run();
+	int t;
+	cin>>t;
+	while(t--){
+		cin>>n>>m;
+		if(!m){
+			cout<<0<<endl;
+			continue;
+		}
+		int cnt=0;
+		mem(dp,-1);
+		for (int i = 1; i < n; ++i) {
+			cnt+=solve(1,i,1<<i);
+			cnt%=mod;
+		}
+		cout<<cnt<<endl;
+	}
+
+}
