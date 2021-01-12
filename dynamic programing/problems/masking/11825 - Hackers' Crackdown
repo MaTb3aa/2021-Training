@@ -1,0 +1,62 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = (1<<12) + 5, M = 2e5 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+ // __builtin_popcount
+int Case = 1;
+int n, m, dp[1<<18], c[1<<18], p[18], T;
+int main() {
+	run();
+	while(cin>>n&&n){
+		//solve();
+		mem(dp,0);
+		mem(c,0);
+		for(int i = 0; i < n; i++) {
+			int sz;cin>>sz;
+			p[i] = 1<<i; // me
+			for(int j = 1; j <= sz; j++) {
+				int k;cin>>k;
+				p[i] |= 1<<k;
+			}
+		}
+		// pre process
+		for (int mask = 0; mask < (1<<n); ++mask) {
+			for(int i = 0; i < n; i++) {
+				if(mask&(1<<i)) c[mask] |= p[i];
+			}
+		}
+
+		for (int mask = 0; mask < (1<<n); ++mask) {
+
+	    	for(int sub = mask; sub; sub = mask&(sub-1)) {
+	    		if(c[sub] == (1<<n)-1)
+	    			dp[mask] = max(dp[mask], dp[mask^sub]+1);
+	    	}
+	    }
+	    printf("Case %d: %d\n", ++T, dp[(1<<n)-1]);
+	}
+}
