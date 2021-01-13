@@ -1,3 +1,6 @@
+//total time complexity of O(MlogN+N+M) = O(MlogN).
+
+
 vector<int> parent, rank;
 
 void make_set(int v) {
