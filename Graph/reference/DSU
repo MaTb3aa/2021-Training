@@ -1,1 +1,71 @@
+/// nave aproach
+void make_set(int v) {
+    parent[v] = v;
+}
 
+int find_set(int v) {
+    if (v == parent[v])
+        return v;
+    return find_set(parent[v]);
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b)
+        parent[b] = a;
+} 
+//////////////////////////
+By Rank 
+void make_set(int v) {
+    parent[v] = v;
+    size[v] = 1;
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (size[a] < size[b])
+            swap(a, b);
+        parent[b] = a;
+        size[a] += size[b];
+    }
+}
+//////////////////////////////////
+void make_set(int v) {
+    parent[v] = v;
+    rank[v] = 0;
+}
+
+void union_sets(int a, int b) {
+    a = find_set(a);
+    b = find_set(b);
+    if (a != b) {
+        if (rank[a] < rank[b])
+            swap(a, b);
+        parent[b] = a;
+        if (rank[a] == rank[b])
+            rank[a]++;
+    }
+}
+/////////////////////////////////////////
+
+problem of painting subarrays. We have a segment of length L,
+each element initially has the color 0. We have to repaint the subarray [l,r] with the color c for each query (l,r,c).
+At the end we want to find the final color of each cell. 
+We assume that we know all the queries in advance, i.e. the task is offline.
+
+for (int i = 0; i <= L; i++) {
+    make_set(i);
+}
+
+for (int i = m-1; i >= 0; i--) {
+    int l = query[i].l;
+    int r = query[i].r;
+    int c = query[i].c;
+    for (int v = find_set(l); v <= r; v = find_set(v)) {
+        answer[v] = c;
+        parent[v] = v + 1;
+    }
+}
