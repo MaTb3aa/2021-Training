@@ -1,0 +1,137 @@
+/***  الرحيم الرحمن الله بسم   ***/
+#include<bits/stdc++.h>
+#define sz(s)               (int)s.size()
+#define mem(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+using namespace std;
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+const int N = 350, M = 2000 + 5, mod = 1e9 + 7;
+void run() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+	//freopen("groups.in", "r", stdin);
+#endif
+}
+
+/// MST_Kruskal
+
+struct unionFind{
+    vector < int > rankk , parent ;
+    int forests ;
+    unionFind(ll n){
+        rankk = vector < int > (n) , parent = vector < int > (n);
+        forests = n ;
+        for(int i = 0 ; i < n ;i++){
+            parent[i]=i;
+            rankk[i]=1;
+        }
+    }
+    int findSet(ll x){
+        if(x==parent[x])return x ;
+        return parent[x] = findSet(parent[x]);
+    }
+    void link(int x , int y){
+        if(rankk[x]>rankk[y])swap(x,y);
+        parent[x]=y;
+        if(rankk[x]==rankk[y])rankk[y]++;
+    }
+    bool unionSets(int x , int y){
+        x = findSet(x) , y = findSet(y);
+        if(x!=y){
+            link(x,y);
+            forests--;
+        }
+        return x!=y;
+    }
+    bool sameSet(int x , int y){
+        return findSet(x)==findSet(y);
+    }
+    vector < vector < int > > connectedComponent(){
+        vector < vector < int > > comps(sz(parent));
+        for(int i = 0 ; i < sz(parent);i++){
+            comps[findSet(i)].push_back(i);
+        }
+    }
+};
+struct edge{
+    int from , to ,w ;
+    edge(int from , int to , int w):from(from),to(to),w(w){}
+    bool operator < (const edge& e)const{
+        return w > e.w;
+    }
+};
+
+pair<ll,vector<edge>> MST_kruskal(vector < edge > edgeList , int n){
+    unionFind uf(n);
+    vector < edge > edges ;
+    priority_queue < edge > q ;
+    for(auto p : edgeList)q.push(p);
+    ll cost=0;
+    while(!q.empty()){
+        edge p = q.top() ; q.pop();
+        if(uf.unionSets(p.from,p.to)){
+        	edges.push_back(p);
+            cost+=p.w;
+        }
+    }
+    if(sz(edges)!=n-1)return {OO,vector<edge>()};
+    return {cost,edges};
+}
+bool ok(edge a,edge b){
+	return (a.from==b.from && a.to==b.to && a.w==b.w);
+}
+int tt=1;
+int main() {
+	run();
+	int t;
+	cin>>t;
+	while(t--){
+		int n,e;
+		cin>>n>>e;
+		vector<edge>edges;
+		while(e--){
+			int a,b,c;
+			cin>>a>>b>>c;
+			edges.push_back({a-1,b-1,c});
+		}
+		cout<<"Case #"<<tt++<<" : ";
+		pair<ll,vector<edge>>one=MST_kruskal(edges,n);
+
+		if(one.first==OO)cout<<"No way\n";
+		else {
+			ll two=OO;
+			for (int i = 0; i < sz(one.second); ++i) {
+				edge a = one.second[i];
+				for (int j = 0; j < sz(edges); ++j) {
+					edge b = edges[j];
+					if(ok(a,b)){
+						edges[j]={0,0,OO};
+						two=min(two,(MST_kruskal(edges,n)).first);
+						edges[j]=b;
+					}
+
+				}
+			}
+			if(two==OO)cout<<"No second way\n";
+			else cout<<two<<endl;
+		}
+	}
+
+
+
+
+}
