@@ -30,26 +30,26 @@ void run() {
 /// MST_Kruskal
 
 struct unionFind{
-    vector < short > rankk , parent ;
-    short forests ;
+    vector < int > rankk , parent ;
+    int forests ;
     unionFind(ll n){
-        rankk = vector < short > (n) , parent = vector < short > (n);
+        rankk = vector < int > (n) , parent = vector < int > (n);
         forests = n ;
-        for(short i = 0 ; i < n ;i++){
+        for(int i = 0 ; i < n ;i++){
             parent[i]=i;
             rankk[i]=1;
         }
     }
-    short findSet(ll x){
+    int findSet(ll x){
         if(x==parent[x])return x ;
         return parent[x] = findSet(parent[x]);
     }
-    void link(short x , short y){
+    void link(int x , int y){
         if(rankk[x]>rankk[y])swap(x,y);
         parent[x]=y;
         if(rankk[x]==rankk[y])rankk[y]++;
     }
-    bool unionSets(short x , short y){
+    bool unionSets(int x , int y){
         x = findSet(x) , y = findSet(y);
         if(x!=y){
             link(x,y);
@@ -57,26 +57,26 @@ struct unionFind{
         }
         return x!=y;
     }
-    bool sameSet(short x , short y){
+    bool sameSet(int x , int y){
         return findSet(x)==findSet(y);
     }
-    vector < vector < short > > connectedComponent(){
-        vector < vector < short > > comps(sz(parent));
-        for(short i = 0 ; i < sz(parent);i++){
+    vector < vector < int > > connectedComponent(){
+        vector < vector < int > > comps(sz(parent));
+        for(int i = 0 ; i < sz(parent);i++){
             comps[findSet(i)].push_back(i);
         }
     }
 };
 struct edge{
-    short from , to ;
+    int from , to ;
     ll w ;
-    edge(short from , short to , ll w):from(from),to(to),w(w){}
+    edge(int from , int to , ll w):from(from),to(to),w(w){}
     bool operator < (const edge& e)const{
         return w > e.w;
     }
 };
 
-vector < edge >  MST_kruskal(vector < edge > edgeList , short n){
+vector < edge >  MST_kruskal(vector < edge > edgeList , int n){
     unionFind uf(n);
     vector < edge > edges ;
     priority_queue < edge > q ;
