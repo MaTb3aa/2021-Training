@@ -38,7 +38,7 @@ ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)              //
 
 //==================================================================//
 void run() {														//
-	ios::sync_with_stdio(false)cin.tie(NULL);cout.tie(NULL);		//													
+	ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);		//
 #ifndef ONLINE_JUDGE												//
 	freopen("input.txt", "r", stdin);								//
 #else																//
@@ -50,7 +50,7 @@ const int N = 1e6+5, M = 2000 + 5, mod = 1e9 + 7;
 
 int main() {
 	run();
-	
+
 
 
 
