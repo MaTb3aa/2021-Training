@@ -1,0 +1,68 @@
+/***  الرحيم الرحمن الله بسم   ***/
+//==================================================================//
+#include<bits/stdc++.h>
+using namespace std;
+#define sz(s)               (int)s.size()
+#define clr(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+//==================================================================//
+
+//==================================================================//
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+//==================================================================//
+
+
+//==================================================================//
+void printDouble(double f,int p){ cout << fixed;                    //
+     cout << setprecision(p) << f <<endl; }                         //
+int  Set(int N,int cur){ return N = N | (1<<cur); }                 //
+int  Reset(int N,int cur){ return N = N & ~(1<<cur); }              //
+bool Check(int N,int cur){ return (bool)(N & (1<<cur)); }           //
+ll   GCD(ll a,ll b){ if(b == 0) return a; return GCD(b,a%b);}       //
+ll   LCM(ll a,ll b){ return a*b/GCD(a,b);}                          //
+ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)              //
+     res = (res*x); x = (x*x);p >>= 1;} return res;}                //
+//==================================================================//
+
+
+
+//==================================================================//
+void run() {
+	ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+//	freopen("stations.in", "r", stdin);
+#endif
+}
+//==================================================================//
+const int N = 200005, M = 2000 + 5, mod = 1e9 + 7;
+
+ll solve (ll b , ll p , ll mod ){
+	if ( p == 0)return 1;
+	else if (p % 2 ==0 ){
+		ll ans = solve (b, p / 2 , mod);
+		return (ans % mod * ans % mod)% mod;
+
+	}
+	else return (b%mod * solve (b , p-1 , mod)% mod);
+}
+int main() {
+	run();
+	int t,tt=1;cin>>t;
+	while(t--){
+		int n;cin>>n;
+		cout<<"Case #"<<tt++<<": "<<solve(n,max(0,n-2),2000000011)<<endl;
+	}
+
+}
