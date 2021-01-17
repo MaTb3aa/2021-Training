@@ -1,0 +1,123 @@
+/***  الرحيم الرحمن الله بسم   ***/
+//==================================================================//
+#include<bits/stdc++.h>
+using namespace std;
+#define sz(s)               (int)s.size()
+#define clr(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+//==================================================================//
+
+//==================================================================//
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+//==================================================================//
+
+
+//==================================================================//
+void printDouble(double f,int p){ cout << fixed;                    //
+     cout << setprecision(p) << f <<endl; }                         //
+int  Set(int N,int cur){ return N = N | (1<<cur); }                 //
+int  Reset(int N,int cur){ return N = N & ~(1<<cur); }              //
+bool Check(int N,int cur){ return (bool)(N & (1<<cur)); }           //
+ll   GCD(ll a,ll b){ if(b == 0) return a; return GCD(b,a%b);}       //
+ll   LCM(ll a,ll b){ return a*b/GCD(a,b);}                          //
+ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)              //
+     res = (res*x); x = (x*x);p >>= 1;} return res;}                //
+//==================================================================//
+
+
+
+//==================================================================//
+void run() {
+	ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+//	freopen("stations.in", "r", stdin);
+#endif
+}
+//==================================================================//
+const int N = 200005, M = 2000 + 5, mod = 1e9 + 7;
+
+
+/// MST_Kruskal
+priority_queue<int>mx;
+struct unionFind{
+    vector < int > rankk , parent,size ;
+    int forests ,network=0;
+    unionFind(ll n){
+    	size = rankk = vector < int > (n) , parent = vector < int > (n);
+        forests = n ;
+        for(int i = 0 ; i < n ;i++){
+            parent[i]=i;
+            size[i]=rankk[i]=1;
+        }
+    }
+    int findSet(ll x){
+        if(x==parent[x])return x ;
+        return parent[x] = findSet(parent[x]);
+    }
+    void link(int x , int y){
+        if(rankk[x]>rankk[y])swap(x,y);
+        parent[x]=y;
+        size[y]+=size[x];
+        mx.push(size[y]);
+        if(rankk[x]==rankk[y])rankk[y]++;
+    }
+    bool unionSets(int x , int y){
+        if(findSet(x)!=findSet(y)){
+            link(findSet(x),findSet(y));
+            forests--;
+        }
+        return x!=y;
+    }
+    bool sameSet(int x , int y){
+        return findSet(x)==findSet(y);
+    }
+    vector < vector < int > > connectedComponent(){
+        vector < vector < int > > comps(sz(parent));
+        for(int i = 0 ; i < sz(parent);i++){
+            comps[findSet(i)].push_back(i);
+        }
+    }
+};
+void test_case(){
+		mx = priority_queue<int>();
+		int n;
+		cin>>n;
+		map<string,int>mp;
+		int id=1;
+		unionFind dsu(100002);
+		while(n--){
+			string a,b;
+			cin>>a>>b;
+			if(!mp.count(a))mp[a]=id++;
+			if(!mp.count(b))mp[b]=id++;
+			dsu.unionSets(mp[a], mp[b]);
+			cout<<dsu.size[dsu.findSet(mp[a])]<<endl;
+
+		}
+
+
+
+}
+int main() {
+	run();
+	int t=1;
+	cin>>t;
+	while(t--){
+		test_case();
+
+	}
+
+
+}
