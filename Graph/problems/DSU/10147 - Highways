@@ -1,0 +1,144 @@
+/***  الرحيم الرحمن الله بسم   ***/
+//==================================================================//
+#include<bits/stdc++.h>
+using namespace std;
+#define sz(s)               (int)s.size()
+#define clr(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+//==================================================================//
+
+//==================================================================//
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+//==================================================================//
+
+
+//==================================================================//
+void printDouble(double f,int p){ cout << fixed;                    //
+     cout << setprecision(p) << f <<endl; }                         //
+int  Set(int N,int cur){ return N = N | (1<<cur); }                 //
+int  Reset(int N,int cur){ return N = N & ~(1<<cur); }              //
+bool Check(int N,int cur){ return (bool)(N & (1<<cur)); }           //
+ll   GCD(ll a,ll b){ if(b == 0) return a; return GCD(b,a%b);}       //
+ll   LCM(ll a,ll b){ return a*b/GCD(a,b);}                          //
+ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)              //
+     res = (res*x); x = (x*x);p >>= 1;} return res;}                //
+//==================================================================//
+
+
+
+//==================================================================//
+void run() {
+	ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+//	freopen("stations.in", "r", stdin);
+#endif
+}
+//==================================================================//
+const int N = 200005, M = 2000 + 5, mod = 1e9 + 7;
+
+
+/// MST_Kruskal
+
+struct unionFind{
+    vector < int > rankk , parent ;
+    int forests ;
+    unionFind(ll n){
+        rankk = vector < int > (n) , parent = vector < int > (n);
+        forests = n ;
+        for(int i = 0 ; i < n ;i++){
+            parent[i]=i;
+            rankk[i]=1;
+        }
+    }
+    int findSet(ll x){
+        if(x==parent[x])return x ;
+        return parent[x] = findSet(parent[x]);
+    }
+    void link(int x , int y){
+        if(rankk[x]>rankk[y])swap(x,y);
+        parent[x]=y;
+        if(rankk[x]==rankk[y])rankk[y]++;
+    }
+    bool unionSets(int x , int y){
+        x = findSet(x) , y = findSet(y);
+        if(x!=y){
+            link(x,y);
+            forests--;
+        }
+        return x!=y;
+    }
+    bool sameSet(int x , int y){
+        return findSet(x)==findSet(y);
+    }
+    vector < vector < int > > connectedComponent(){
+        vector < vector < int > > comps(sz(parent));
+        for(int i = 0 ; i < sz(parent);i++){
+            comps[findSet(i)].push_back(i);
+        }
+    }
+};
+struct edge{
+    int from , to ;
+    ll w ;
+
+};
+bool cmp(edge a, edge b) {
+    return a.w < b.w;
+}
+edge E[755*755];
+int t, n, m, x[755], y[755];
+int main() {
+	run();
+	cin>>t;
+	int i, j, a, b;
+	while(t--){
+
+		cin>>n;
+		for(i = 1; i <= n; i++)
+			cin>>x[i]>>y[i];
+
+		cin>>m;
+		int cnt = 0;
+		unionFind uf(n+1);
+		while(m--) {
+			cin>>a>>b;
+			cnt += uf.unionSets(a, b);
+		}
+		if(cnt == n-1) {
+			puts("No new highways need");
+		} else {
+			m = 0;
+
+			for(i = 1; i <= n; i++) {
+				for(j = i+1; j <= n; j++) {
+					E[m].from = i, E[m].to = j;
+					E[m].w = (x[i]-x[j])*(x[i]-x[j])+(y[i]-y[j])*(y[i]-y[j]);
+					m++;
+				}
+			}
+			sort(E,E+m,cmp);
+			for(i = 0; i < m; i++) {
+				if(uf.unionSets(E[i].from, E[i].to)) {
+					printf("%d %d\n", E[i].from, E[i].to);
+				}
+			}
+		}
+
+		if(t)
+			puts("");
+	}
+
+
+}
