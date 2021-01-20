@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 100000 + 10;
+const int M = 1000000007;
+const double eps = 1e-9;
+const double PI = acos(-1);
+const int oo = 1000000000;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> ii;
+#define pb push_back 
+#define all(c) (c).begin(),(c).end()
+ 
+int a[100010],n,t,l,r;
+ll seg[4*100010],lazy[4*100010];
+ 
+void push(int n , int s , int e){
+	seg[n] += (e-s+1)*lazy[n];
+	if(s != e){
+		lazy[2*n] += lazy[n];
+		lazy[2*n+1] += lazy[n];
+	}
+	lazy[n]=0;
+}
+int val;
+void update(int n , int s , int e){
+	push(n,s,e);
+	if(s > r || e < l)return;
+	if(s >= l && e <= r){
+		lazy[n] = val;
+		push(n,s,e);
+		return;
+	}
+	update(2*n,s,(s+e)/2);
+	update(2*n+1,(s+e)/2+1,e);
+	seg[n] = seg[2*n]+ seg[2*n+1];
+}
+ll get(int n , int s ,int e){
+	push(n,s,e);
+	if(s > r || e < l)return 0;
+	if(s >= l && e <= r)return seg[n];
+	return get(2*n,s,(s+e)/2)+get(2*n+1,(s+e)/2+1,e);
+}
+int main(){
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#endif
+	scanf("%d",&t);
+	while(t--){
+		int q;
+ 
+		scanf("%d%d",&n,&q);	
+		for (int i = 1; i <= 4*n; ++i){
+			seg[i] = lazy[i] = 0;
+		}
+ 
+		for (int i = 0; i < q; ++i){
+			int type;
+			scanf("%d",&type);
+			if(type == 0){
+				scanf("%d%d%d",&l,&r,&val);
+				update(1,1,n);
+			}else{
+				scanf("%d%d",&l,&r);
+				printf("%lld\n",get(1,1,n) );
+			}
+		}
+	}
+	return 0;	
+}
