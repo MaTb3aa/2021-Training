@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 100000 + 10;
+const int M = 1000000007;
+const double eps = 1e-9;
+const double PI = acos(-1);
+const int oo = 1000000000;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> ii;
+#define pb push_back 
+#define all(c) (c).begin(),(c).end()
+ 
+int seg[4*100010],a[100010],n,t;
+ 
+void build(int n , int s , int e){
+	if(s == e){
+		seg[n] = a[s];
+		return;
+	}
+	build(2*n,s,(s+e)/2);
+	build(2*n+1,(s+e)/2+1,e);
+	seg[n] = min(seg[2*n],seg[2*n+1]);
+}
+int l , r;
+int get(int n,int s , int e){
+	if(s > r || e < l)return 1e9;
+	if(s >= l && e <= r)return seg[n];
+	return min(get(2*n,s,(s+e)/2),
+		get(2*n+1,(s+e)/2+1,e));
+}
+int at,val;
+void update(int n , int s , int e){
+	if(s > at || e < at)return;
+	if(s == e){
+		seg[n] = val;
+		return;
+	}
+	update(2*n,s,(s+e)/2);
+	update(2*n+1,(s+e)/2+1,e);
+	seg[n] = min(seg[2*n],seg[2*n+1]);
+}
+int main(){
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#endif
+	scanf("%d",&n);	
+	for (int i = 1; i <= n; ++i){
+		scanf("%d",&a[i]);
+	}
+	build(1,1,n);
+	scanf("%d",&t);
+	for (int i = 0; i < t; ++i){
+		scanf("%d%d",&l,&r);
+		l++;
+		r++;
+		printf("%d\n",get(1,1,n));
+	}
+	return 0;	
+}
+	return 0;
+}
