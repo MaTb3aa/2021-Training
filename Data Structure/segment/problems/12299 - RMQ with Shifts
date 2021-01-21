@@ -1,0 +1,136 @@
+/***  الرحيم الرحمن الله بسم   ***/
+//==================================================================//
+#include<bits/stdc++.h>
+using namespace std;
+#define sz(s)               (int)s.size()
+#define clr(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define popcount(n) __builtin_popcount(n)
+#pragma optimization_level 3
+#pragma GCC optimize("Ofast,no-stack-protector,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+//==================================================================//
+
+//==================================================================//
+const int dx[] = { 0, -1, 0, 1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+//==================================================================//
+
+
+//==================================================================//
+void printDouble(double f,int p){ cout << fixed;                    //
+	 cout << setprecision(p) << f <<endl; }                         //
+int  Set(int N,int cur){ return N = N | (1<<cur); }                 //
+int  Reset(int N,int cur){ return N = N & ~(1<<cur); }              //
+bool Check(int N,int cur){ return (bool)(N & (1<<cur)); }           //
+ll   GCD(ll a,ll b){ if(b == 0) return a; return GCD(b,a%b);}       //
+ll   LCM(ll a,ll b){ return a*b/GCD(a,b);}                          //
+ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)              //
+	 res = (res*x); x = (x*x);p >>= 1;} return res;}                //
+//==================================================================//
+
+
+//==================================================================//
+void run() {
+	ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#else
+//	freopen("stations.in", "r", stdin);
+#endif
+}
+//==================================================================//
+const int N = 100000+5, M = 1e5 + 5, mod = 1e9 + 7;
+int n,q,l,r;
+int a[N],seg[4*N];
+vector<int>v;
+void build(int n,int s,int e){
+	if(s==e){
+		seg[n]=a[s];
+		return ;
+	}
+	int md=s+e>>1;
+	build(2*n,s,md);
+	build(2*n+1,md+1,e);
+	seg[n]=min(seg[2*n],seg[2*n+1]);
+}
+int get(int n,int s,int e,int x,int y){
+	if(x==s&&y==e)return seg[n];
+	int md=s+e>>1;
+	int l=n<<1;
+	int r=l|1;
+	if(y<=md)
+		return get(l,s,md,x,y);
+	else if(x>md)
+		return get(r,md+1,e,x,y);
+	else
+		return min(get(l,s,md,x,md),get(r,md+1,e,md+1,y));
+
+}
+int at,val;
+void update(int n,int s,int e){
+	if(at>e || at<s)return ;
+	if(s==e){
+		seg[n]=val;
+		return ;
+	}
+	int md=s+e>>1;
+
+	update(2*n,s,md);
+	update(2*n+1,md+1,e);
+	seg[n]=min(seg[2*n],seg[2*n+1]);
+
+}
+int main() {
+	run();
+	while(cin>>n>>q){
+		for (int i = 1; i <= n; ++i)cin>>a[i];
+
+		build(1,1,n);
+
+		while(q--){
+			string s;cin>>s;
+			char c=s[0];
+			s.erase(0,6);
+			s.pop_back();
+			replace(all(s), ',',' ');
+			stringstream ss(s);
+			if(c=='q'){
+				ss>>l;ss>>r;
+				cout<<get(1,1,n,l,r)<<endl;
+			}
+			else {
+				v.clear();int x;
+				while(ss>>x){
+					v.push_back(x);
+				}
+				int tmp=a[v[0]];
+				for (int i = 0; i < sz(v)-1; ++i) {
+					at=v[i],val=a[v[i+1]];
+					a[at]=val;
+					update(1,1,n);
+				}
+				at=v.back();val=tmp;
+				a[at]=val;
+				update(1,1,n);
+
+			}
+		}
+	}
+
+
+
+
+
+
+
+}
