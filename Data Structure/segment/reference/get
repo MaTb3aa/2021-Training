@@ -1,0 +1,18 @@
+SegmentTree Query(int node , int start , int end , int x , int y)
+{
+    if(start == x && end == y) return tree[node];
+
+    int l = node<<1 ;
+    int r = node<<1|1;
+
+    int mid = (start + end )>>1;
+
+    if(y <= mid ) return Query(l,start,mid,x,y); // whole side is in left
+
+    else if( x > mid ) return Query(r,mid+1,end,x,y) ; // whole side is in right
+
+    else
+    {
+        return merge( Query(l,start,mid,x,mid) , Query(r,mid+1,end,mid+1,y)  ) ; // split in two side so merging
+    }
+}
