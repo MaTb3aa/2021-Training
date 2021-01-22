@@ -1,0 +1,61 @@
+struct SegmentTree{
+ 
+	vector<ll> tree;
+	vector<ll> lazy;
+	SegmentTree(int n) {
+		tree.resize(2 * n);
+		lazy.resize(2 * n);
+		for (int i = 0; i < sz(tree); i++)
+			tree[i] = 1e18, lazy[i] = 0;
+	}
+ 
+	void propagate(int cur, int l, int r, int x, int y) {
+		if (lazy[cur]) {
+			tree[cur] += lazy[cur];
+			if (l != r)
+				lazy[x] += lazy[cur], lazy[y] += lazy[cur];
+			lazy[cur] = 0;
+		}
+	}
+	void build(int cur, int l, int r, vector<ll>& arr) {
+		if (l == r) {
+			tree[cur] = arr[l];
+			return;
+		}
+		int left = 2 * cur;
+		int right = 2 * cur + 1;
+		int mid = (l + r) / 2;
+		build(left, l, mid, arr);
+		build(right, mid + 1, r, arr);
+		tree[cur] = min(tree[left], tree[right]);
+	}
+ 
+	void update(int cur, int l, int r, int x, int y, ll val) {
+		int left = 2 * cur;
+		int right = 2 * cur + 1;
+		int mid = (l + r) / 2;
+		propagate(cur, l, r, left, right);
+		if (l > y || r < x)	return;
+		if (l >= x && r <= y) {
+			tree[cur] += val;
+			if (l != r)
+				lazy[left] += val, lazy[right] += val;
+			return;
+		}
+		update(left, l, mid, x, y, val);
+		update(right, mid + 1, r, x, y, val);
+		tree[cur] = min(tree[left], tree[right]);
+	}
+	ll solve(int cur, int l, int r, int x, int y) {
+		int left = 2 * cur;
+		int right = 2 * cur + 1;
+		int mid = (l + r) / 2;
+		propagate(cur, l, r, left, right);
+ 
+		if (x > r || y < l)
+			return 1e18;
+		if (l >= x && r <= y)
+			return tree[cur];
+		return min(solve(left, l, mid, x, y), solve(right, mid + 1, r, x, y));
+	}
+};
