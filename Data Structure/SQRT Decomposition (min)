@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int N = 100000 + 10;
+const int M = 1000000007;
+const double eps = 1e-9;
+const double PI = acos(-1);
+const int oo = 1000000000;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef pair<int, int> ii;
+#define pb push_back 
+#define all(c) (c).begin(),(c).end()
+int n,q,v[N],root,bucket[N];
+ 
+int main(){
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+#endif
+	cin>>n;
+	root=sqrt(n);
+	for(int i=0; i<n; ++i)
+		scanf("%d",&v[i]);
+	for(int i=0; i<n; ++i){
+		if(i%root==0)
+			bucket[i/root]=v[i];
+		else
+			bucket[i/root]=min(bucket[i/root], v[i]);
+	}
+	cin>>q;
+	for(int l,r,i=0; i<q; ++i){
+		scanf("%d%d",&l,&r);
+		int ans=1e9;
+		for(int j=l; j<=r; ++j){
+			if(j%root==0 && j+root-1<=r){
+				ans=min(ans, bucket[j/root]);
+				j+=root-1;
+			}
+			else
+				ans=min(ans, v[j]);
+		}
+		printf("%d\n", ans);
+	}
+	return 0;	
+}
+ 
