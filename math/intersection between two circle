@@ -1,0 +1,31 @@
+long double solve(double x0, double y0, double r0, double x1, double y1, double r1)
+{
+    long double rr0 = r0 * r0;
+    long double rr1 = r1 * r1;
+    long double d = sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0));
+
+    if (d > r1 + r0)
+    {
+        return 0;
+    }
+
+    else if (d <= abs(r0 - r1) && r0 >= r1)
+    {
+        return PI * rr1;
+    }
+
+    else if (d <= abs(r0 - r1) && r0 < r1)
+    {
+        return PI * rr0;
+    }
+
+    else
+    {
+        long double phi = (acos((rr0 + (d * d) - rr1) / (2 * r0 * d))) * 2;
+        long double theta = (acos((rr1 + (d * d) - rr0) / (2 * r1 * d))) * 2;
+        long double area1 = 0.5 * theta * rr1 - 0.5 * rr1 * sin(theta);
+        long double area2 = 0.5 * phi * rr0 - 0.5 * rr0 * sin(phi);
+
+        return area1 + area2;
+    }
+}
