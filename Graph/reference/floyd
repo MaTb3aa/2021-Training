@@ -1,24 +1,27 @@
-/*
- *
- *
- ******************************************** Licence *******************************************
- * 																								*
- * This File is part of Algorithms Arabic Video Series											*
- *	Made By Eng Mostafa Saad, Teaching Assistant in FCI - Cairo University						*
- * 																								*
- *	Available at My YouTube Channel: http://www.youtube.com/user/nobody123497?feature=mhee		*
- * 																								*
- * Feel free to make use of it at anytime, for any reason, in anyway, without any obligations.	*
- * 																								*
- * 																								*
- * In case of finding a mistake, kindly notify me at: mostafa.saad.fci@gmail.com				*
- * 																								*
- * Mostafa Saad Ibrahim © 2013																	*
- * 																								*
- ************************************************************************************************
- *
- *
- */
+int adj[MAX][MAX];
+int path[MAX][MAX];
+int n;
+set<pair<int,int>>all;
+void build_path(int src, int dest)
+{
+	if( path[src][dest] == -1 )	//So this is the last way
+	{
+		if(all.count({src,dest}))all.erase({src,dest});
+		if(all.count({dest,src}))all.erase({dest,src});
+		return;
+	}
+	//cout<<path[src][dest]<<" ";
+	build_path( src, path[src][dest]);
+	build_path( path[src][dest], dest);
+}
+void floyd(){
+	 for(int i=1;i<=n;i++)adj[i][i]=0;
+	        for(int k=1;k<=n;k++) for(int i=1;i<=n;i++)for(int j=1;j<=n;j++)
+	            if(adj[i][j]>adj[i][k]+adj[k][j]){
+	            	adj[i][j]=adj[i][k]+adj[k][j];
+	                path[i][j]=k;
+	            }
+}
 
 
 
