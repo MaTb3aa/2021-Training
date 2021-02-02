@@ -6,11 +6,10 @@ void build_path(int src, int dest)
 {
 	if( path[src][dest] == -1 )	//So this is the last way
 	{
-		if(all.count({src,dest}))all.erase({src,dest});
-		if(all.count({dest,src}))all.erase({dest,src});
+		cout<<src<<" "<<dest<<endl;
 		return;
 	}
-	//cout<<path[src][dest]<<" ";
+	
 	build_path( src, path[src][dest]);
 	build_path( path[src][dest], dest);
 }
