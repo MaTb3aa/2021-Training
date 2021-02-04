@@ -1,0 +1,15 @@
+round = nearst intger x (away from zero)
+        3/2  = 1.5 = 2
+        -3/2  =-1.5 = -3            +(x+(y/2)/2)                 -(x-(y/2)/2)
+        
+        if you need round to spacific amout
+          48.2 second -> nerst 15 second  = 45
+          2.178 dollar -> nerst cent(0.01) = 2.18
+            you can do this by [ round(x,m)  = round(x/m) * m]
+          
+floor = round down                  ((x+y-1)/y)
+ceil = round up
+
+---------------------------------------------------
+2^x = (1/2)^x  = .5   
+2^x = (1/2)^(-x) = .5^(-x)
