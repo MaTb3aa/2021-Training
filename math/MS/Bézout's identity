@@ -1,0 +1,9 @@
+Assume a > 0 and b > 0
+◼ ax + by = g = gcd(a, b) => we know that
+◼ Can we generate further solutions?
+◼ Is following valid:
+◼ a(x+b) + b(y-a) = g
+◼ Yes, we added ab - ab, so same equation
+◼ a(x+b/g) + b(y-a/g) = g
+◼ a(x+kb/g) + b(y-ka/g) = g
+◼ With easy math, we can generate!
