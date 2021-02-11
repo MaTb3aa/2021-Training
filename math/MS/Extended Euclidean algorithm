@@ -1,0 +1,27 @@
+GCD(A, B)     ⌊A / B⌋     gcd(a, b) = a * x + b * y        x = prev_y     y = prev_x - q * x
+
+(1180, 482)    2          2 = 1180 (-29) + 482 * (71)       -29           13 - 2 * (-29) = 71
+(482, 216)     2          2 = 482 (13)+ 216 (-29)            13           -3 - 2 * 13 = -29
+(216, 50)      4          2 = 216 (-3) + 50 (13)             -3            1 - 4 * (-3) = 13
+(50, 16)       3          2 = 50 + 16 (-3)                    1            0 - 3 * 1 = -3
+(16, 2)        8          2 = 0 * 16 + 1 * 2                  0            1
+(2, 0)                    2 = 1 * 2 + 0 * 0                   1            0 (base case)
+
+
+// ax+by = g = gcd(a,b)
+ll extended_eculid(ll a,ll b,ll &x,ll &y){
+	if(b==0){
+		x=1;y=0;
+		return a;
+	}
+	ll g = extended_eculid(b, a%b, y, x);
+	// now our x = previous y
+	y-=(a/b)*x;
+	return g;
+}
+int main() {
+	run();
+	ll x=0,y=0;
+	extended_eculid(1180,482,x,y);
+	cout<<x<<" "<<y<<endl;
+}
