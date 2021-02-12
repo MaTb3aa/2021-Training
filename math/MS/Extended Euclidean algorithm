@@ -8,6 +8,11 @@ GCD(A, B)     ⌊A / B⌋     gcd(a, b) = a * x + b * y        x = prev_y     y 
 (2, 0)                    2 = 1 * 2 + 0 * 0                   1            0 (base case)
 
 
+
+For each input line the output line should consist of three integers X, Y and D, separated with space.
+If there are several such X and Y , you should output that pair for which |X| + |Y | is the minimal. If
+there are several X and Y satisfying the minimal criteria, output the pair for which X ≤ Y .
+
 // ax+by = g = gcd(a,b)
 ll extended_eculid(ll a,ll b,ll &x,ll &y){
 	if(b==0){
@@ -25,3 +30,15 @@ int main() {
 	extended_eculid(1180,482,x,y);
 	cout<<x<<" "<<y<<endl;
 }
+
+Bézout's identity
+
+Assume a > 0 and b > 0
+◼ ax + by = g = gcd(a, b) => we know that
+◼ Can we generate further solutions?
+◼ Is following valid:
+◼ a(x+b) + b(y-a) = g
+◼ Yes, we added ab - ab, so same equation
+◼ a(x+b/g) + b(y-a/g) = g
+◼ a(x+kb/g) + b(y-ka/g) = g
+◼ With easy math, we can generate!
