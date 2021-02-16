@@ -1,0 +1,74 @@
+/***  الرحيم الرحمن الله بسم   ***/
+//==================================================================//
+#include<bits/stdc++.h>
+using namespace std;
+#define sz(s)               (int)s.size()
+#define clr(x,y)    memset(x,y,sizeof(x))
+#define all(v) ((v).begin()), ((v).end())
+#define RT(x)           return cout<<x,0;
+#define endl                         '\n'
+#define INF 0x3f3f3f3f3f3f3f3fLL
+#define OO  0x3f3f3f3f
+#define watch(x) cout<<#x<<" = { "<<x<<" }\n"
+#define popcount(n) __builtin_popcount(n)
+#pragma optimization_level 3
+#define lft n<<1
+#define ryt n<<1|1
+#pragma GCC optimize("Ofast,no-stack-protector,fast-math,O3")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+//==================================================================//
+
+//==================================================================//
+const int dx[] = { 0, 1, 0, -1, 1, 1, -1, -1 };
+const int dy[] = { 1, 0, -1, 0, 1, -1, 1, -1 };
+template<typename T>
+using Graph = vector<vector<T>>;
+typedef long long ll;
+typedef unsigned long long ull;
+//==================================================================//
+
+
+//==================================================================//
+void printDouble(double f,int p){ cout << fixed;
+ cout << setprecision(p) << f <<endl; }
+int  Set(int N,int cur){ return N = N | (1<<cur); }
+int  Reset(int N,int cur){ return N = N & ~(1<<cur); }
+bool Check(int N,int cur){ return (bool)(N & (1<<cur)); }
+ll   GCD(ll a,ll b){ if(b == 0) return a; return GCD(b,a%b);}
+ll   LCM(ll a,ll b){ return a*b/GCD(a,b);}
+ll   POW(ll a,ll p){ ll res = 1,x = a;while(p){if(p&1)
+ res = (res*x); x = (x*x);p >>= 1;} return res;}
+//==================================================================//
+
+
+//==================================================================//
+void run() {
+ios::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#ifndef ONLINE_JUDGE
+freopen("input.txt", "r", stdin);
+#else
+//	freopen("stations.in", "r", stdin);
+#endif
+}
+//==================================================================//
+const int N = 100000+5, M = 18, mod = 998244353;
+string s="";
+map<string,int>mp;
+int idx=0;
+void solve(int lst,int mx){
+	if(sz(s)>mx)return ;
+	if(mp.find(s)==mp.end())mp[s]=idx++;
+
+	for (int i = lst+1; i < 26; ++i) {
+		s+='a'+i;
+		solve(i,mx);
+		s.pop_back();
+	}
+}
+int main() {
+	run();
+	for (int i = 1; i < 6; ++i)solve(-1,i);
+	string s;
+	while(cin>>s)cout<<mp[s]<<endl;
+}
+
