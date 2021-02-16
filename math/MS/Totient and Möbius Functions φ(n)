@@ -88,3 +88,77 @@ ll phi_factn(int n){
 	}
 	return ret;
 }
+
+
+Square-free integer
+
+Is not divisible by perfect square (except 1)
+◼ perfect square: sqrt(n) = is integer. sqrt(16) = 4
+◼ SQ: e.g. not divisible by 16=4x4...or 49=7x7...etc
+
+In other words, no prime number occurs more
+than once: e.g. n = 2*5*11 is square free, but n
+= 2*3*3*3*7 is not (divisible by 9 = 3x3)
+
+I-th square free: 1, 2, 3, 5, 6, 7, 10, 11, 13, 14,
+15, 17, 19, 21, 22, 23, 26, 29, 30, 31, 33, 34
+◼ F(13) = 19
+
+
+
+Möbius function
+
+μ(1) = 1
+◼ μ(n) = 1 if n is a square-free positive integer
+with an even number of prime factors.
+◼ E.g. μ(2*3*5*7) = 1
+◼ μ(n) = −1 if n is a square-free positive integer
+with an odd number of prime factors.
+◼ E.g. μ(2*3*5) = -1
+◼ μ(n) = 0 if n has a squared prime factor.
+◼ E.g. μ(2*3*3*7) = 0
+
+
+int meobius(int n){
+	int mebval=-1;
+	for (int i = 2; i*i < n; ++i) 
+		if(n%i==0){
+			if(n%(i*i)==0)return 0;
+			n/=i;mebval=-mebval;
+		}
+	
+		if(n)
+			mebval=-mebval;
+	return mebval;
+}
+
+void moebius_generator(){
+	bool prime[N];
+	int moebus[N];
+	for (int i = 2; i <= N; ++i) {
+		moebus[i]=-1,prime[i]=1;
+	}
+	for (int i = 0; i < N; ++i) {
+		moebus[i]=1;
+		for (int j = 0; j < N; ++j) {
+			prime[j]=0,moebus[j]= j%(i*i) == 0 ? 0 : - moebus[j];
+		}
+	}
+}
+
+
+Count the triples (a,b,c) such a, b, c <= n, and
+gcd(a, b, c) = 1
+◼ Reverse thinking, total - (# triples gcd > 1)
+◼ How many triples with gcd multiple of 2: (n/2)3
+◼ How many triples with gcd multiple of 3: (n/3)3
+◼ and 4? Ignore any numbers of internal duplicate primes
+◼ and 6? already computed in 2, 3. Remove it: -(n/6)3
+◼ This is Inclusion Exclusion
+
+
+int n=4;
+ll sum=n*n*n;
+for (int i = 0; i < n; ++i) {
+	sum-=moebus[i]*(n/i)*(n/i)*(n/i);
+}
