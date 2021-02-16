@@ -72,3 +72,17 @@ int main() {
 	while(cin>>s)cout<<mp[s]<<endl;
 }
 
+// another solution
+void solve(){
+	queue<string>q;
+	int idx=1;
+	for (int i = 0; i < 26; ++i) q.push(string(1,i+'a'));
+	while(sz(q)){
+		string cur=q.front();
+		q.pop();
+		mp[cur]=idx++;
+		if(sz(cur)==5)continue;
+		for (int i = cur.back()-'a'+1; i < 26; ++i)q.push(cur+string(1,(i+'a')));
+	}
+
+}
