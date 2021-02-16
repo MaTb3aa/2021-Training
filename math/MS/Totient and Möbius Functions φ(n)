@@ -1,0 +1,90 @@
+φ(n), the Phi Function
+◼ Count integers i < n such that gcd(i, n) = 1
+◼ gcd(a, b) = 1 => then coprimes: gcd(5, 7), gcd(4, 9)
+◼ gcd(prime, i) = 1 for i < prime
+◼ φ(10) = 4 => 1, 3, 7, 9
+◼ φ(5) = 4 => 1, 2, 3, 4 …. φ(prime) = prime-1
+◼ If a, b, c are pairwise coprimes, then
+◼ φ(a*b*c) = φ(a) * φ(b) * φ(c)
+
+
+  if k >= 1  
+      φ(p^k) = p^k -p^(k-1) = p^(k-1) * (p-1) = p^k (1-(1/p))    such that p is prime 
+    
+    
+φ(n) = 1, 1, 2, 2, 4, 2, 6, 4, 6, 4, 10, 4, 12, 6, 8,
+8, 16, 6, 18, 8, 12, 10, 22, 8, 20, 12, 18, 12, 28,
+8, 30, 16, 20, 16, 24, 12, 36, 18, 24, 16, 40, 12
+
+
+φ(1) = φ(2) = 1. φ(5) = 4
+◼ φ(n) is even for n > 2
+◼ sqrt(n) <= φ(n) <= n - sqrt(n): Except 2, 6
+◼ φ(nk) = nk-1 * φ(n)
+◼ n = ∑iφ(di) where di are the divisors of n
+
+//code
+int phi(int n){
+	int cnt=0;
+	for (int i = 1; i < n; ++i) {
+		cnt+=__gcd(i,n)==1;
+	}
+	return cnt;
+}
+
+
+// factorize and use fact p^(k-1) * (p-1) ->p is prime
+int phi(int n){
+	int p_to_k=0,ans=1;
+	for (int i = 2; i*i <= n; i++) {
+		if(n%i==0){
+			p_to_k=1;//powers
+			while(n%i==0){
+				p_to_k*=i;
+				n/=i;
+			}
+			ans*=((p_to_k/i)*(i-1));
+		}
+	}
+	if(n!=1)
+		ans*=(n-1);
+	return ans;
+}
+
+
+/// phi in range with sieve()
+
+void phiRange(int n){
+	bool prime[n];
+	int phi[n];
+	for (int i = 0; i <= n; ++i) {
+		phi[i]=prime[i]=1;
+	}
+
+	for (int i = 2; i <= n; ++i) {
+		if(prime[i]){
+			phi[i]=i-1; //phi(prime) = p-1
+			for (int j = i+i; j <= n; j+=i) {
+				prime[j]=0;
+				int tmp=j,pow=1;
+				while(tmp%i==0){
+					tmp/=i;
+					pow*=i;
+				}
+				phi[j]*=(pow/i)*(i-1);
+			}
+		}
+	}
+	
+}
+
+
+// phi(N!) = (N is prime ? N-1 : N) * phi(N-1)!
+
+ll phi_factn(int n){
+	ll ret=1;
+	for (int i = 2; i <= n; ++i) {
+		ret=ret*(isprime(i)?i-1:i);
+	}
+	return ret;
+}
