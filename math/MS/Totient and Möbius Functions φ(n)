@@ -89,6 +89,34 @@ ll phi_factn(int n){
 	return ret;
 }
 
+// phi for 1e9 
+
+
+v ->vector  of prime numbers
+int phi(int n){
+	if(n==1)return 0;
+	int ans=n;
+	for (int i = 0; i < sz(v) && v[i]*v[i]<=n; ++i) {
+		if(n%v[i]==0){
+			while(n%v[i]==0)n/=v[i];
+			ans-=(ans/v[i]);
+		}
+	}
+	if(n!=1)
+		ans-=(ans/n);
+	return ans;
+}
+
+
+
+
+
+
+
+
+
+
+
 
 Square-free integer
 
