@@ -1,0 +1,101 @@
+ ax ≡ 1 (% m)
+◼ Which means ax % m = 1 % m
+◼ m = 11, a = 8, x = 7 => 8 * 7 = 1 (mod 11)
+◼ Then, a is multiplicative inverse of x for % m
+◼ Also a = 1 / x (mod m)
+◼ Exists IFF gcd(a, m) = 1
+◼ (119 / 7) % 11 => 17 % 11 => 6
+◼ Recall 8 * 7 = 1 (mod 11) … then 1 / 7 == 8 %11
+◼ (119 * 8) % 11 = (119%11 * 8) % 11 = 6
+
+
+ax ≡ 1 (% m)
+◼ Then (ax-1) % m = 0, then ax-1 = qm
+◼ m = 11, a = 8, x = 7 => 8 * 7 = 1 (mod 11)
+◼ 56 - 1 = 5 * 11
+◼ Rearrange: ax + m(-q) = 1
+◼ This is similar to ax + my = gcd(a, m) = 1
+◼ That is, the solution to extended (a, m) giving
+that gcd(a, m) = 1
+◼ So just 1 call to extended, x is the answer
+
+ll extended_eculid(ll a,ll b,ll &x,ll &y){
+	if(b==0){
+		x=1;y=0;
+		return a;
+	}
+	ll g = extended_eculid(b, a%b, y, x);
+	// now our x = previous y
+	y-=(a/b)*x;
+	return g;
+}
+
+ll modInvrse(ll a,ll m){
+	ll x,y;
+	ll d= extended_eculid(a,m,x,y);
+	if(d>1)return -1;
+	return (x+m)%m;
+}
+
+
+Solution 2: Euler's theorem
+
+
+
+if gcd(a, m) = 1 => a^(φ(m) )≡ 1 (%m)
+◼ φ(m) is Euler's totient function
+◼ As a result (divide both sides by a)
+◼  a^(φ(m)-1)  ≡ a^(-1)
+◼ if m is prime   a^(-1) ≡ a^(m-2)
+◼ Computations amount in GCD vs Euler?
+◼ In addition, the theorem can be used to help
+reducing large powers evaluations
+
+
+
+int phi(int n){
+	int cnt=0;
+	for (int i = 1; i < n; ++i) {
+		cnt+=__gcd(i,n)==1;
+	}
+	return cnt;
+}
+
+
+ll solve (ll b , ll p , ll mod ){
+	if ( p == 0)return 1;
+	else if (p % 2 ==0 ){
+		ll ans = solve (b, p / 2 , mod);
+		return (ans % mod * ans % mod)% mod;
+
+	}
+	else return (b%mod * solve (b , p-1 , mod)% mod);
+}
+ll modInvrseP(ll a,ll p){
+	return solve(a,p-2,p);
+}
+ll modInvrse(ll a,ll m){
+	return solve(a,phi(m)-1,m);
+}
+
+Modinverse range for prime
+
+Given P, compute all mod inv for range 1 - (p-1)
+◼ p % i = p - (p / i) * i => % equation
+◼ (p%i) % p = p%i
+◼ p%p = 0
+◼ p % i = -(p / i) * i (mod p) => % P
+◼ Now, divide by i * (p % i)
+◼ 1 / i = - (p / i) * 1 / (p % i) % p
+◼ inv[i] = - (p / i) * inv[p % i] % p
+◼ Add +p to convert to +ve
+◼ inv[i] = p - (p / i) * inv[p % i] % p
+
+
+vector<int>ModInvRange(int p){
+	vector<int>inv(p-1,1);
+	for (int i = 2; i < p; ++i) {
+		inv[i]=(p-(p/i)*inv[p%i]%p)%p;
+	}
+	return inv;
+}
