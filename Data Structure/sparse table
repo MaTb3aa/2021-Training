@@ -1,0 +1,28 @@
+struct sparse_table {
+	vector<int> v, lg;
+	vector<vector<int>> sparseTable;
+	sparse_table(vector<int> &v) :
+			v(v), lg(v.size() + 1) {
+		int n = v.size();
+		//to get log2 in O(1)
+		for (int i = 2; i <= n; i++) {
+			lg[i] = lg[i - 1];
+			if ((i & i - 1) == 0)
+				lg[i]++;
+		}
+		int logN = lg[n];
+		sparseTable = vector<vector<int>>(n, vector<int>(logN + 1));
+		for (int i = 0; i < n; i++)
+			sparseTable[i][0] = v[i];
+		for (int k = 1; k <= logN; k++)
+			for (int i = 0; i + (1 << k - 1) < n; i++) {
+				sparseTable[i][k] = max(sparseTable[i][k - 1],
+						sparseTable[i + (1 << k - 1)][k - 1]);
+			}
+	}
+	int rmq(int l, int r) {
+		int k = lg[r - l + 1];
+		return max(sparseTable[l][k], sparseTable[r - (1 << k) + 1][k]);
+	}
+};
+ 
