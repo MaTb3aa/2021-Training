@@ -1,3 +1,5 @@
+we can use it in this 
+// MIN,MAX,SUM,MULT,GCD
 struct sparse_table {
 	vector<int> v, lg;
 	vector<vector<int>> sparseTable;
@@ -25,4 +27,32 @@ struct sparse_table {
 		return max(sparseTable[l][k], sparseTable[r - (1 << k) + 1][k]);
 	}
 };
+
+
+  // Do sum query [l, r] in O(log2(n)).
+  //
+  // Perform a cascading query which shrinks the left endpoint while summing over all the intervals
+  // which are powers of 2 between [l, r].
+  //
+  // WARNING: This method can easily produces values that overflow.
+  //
+  // NOTE: You can achieve a faster time complexity and use less memory with a simple prefix sum
+  // array. This method is here more as a proof of concept than for its usefulness.
+  private long sumQuery(int l, int r) {
+    long sum = 0;
+    for (int p = log2[r - l + 1]; l <= r; p = log2[r - l + 1]) {
+      sum += dp[p][l];
+      l += (1 << p);
+    }
+    return sum;
+  }
+
+  private long multQuery(int l, int r) {
+    long result = 1;
+    for (int p = log2[r - l + 1]; l <= r; p = log2[r - l + 1]) {
+      result *= dp[p][l];
+      l += (1 << p);
+    }
+    return result;
+  }
  
