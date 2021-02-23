@@ -1,0 +1,47 @@
+// O(log n)
+class LCA {
+	int n, logN, root = 1;
+	vector<int> depth;
+	vector<vector<int>> adj, lca;
+	void dfs(int node, int parent) {
+		lca[node][0] = parent;
+		depth[node] = (parent != -1 ? depth[parent] + 1 : 0);
+		for (int k = 1; k <= logN; k++) {
+			int up_parent = lca[node][k - 1];
+			if (~up_parent)
+				lca[node][k] = lca[up_parent][k - 1];
+		}
+		for (int child : adj[node])
+			if (child != parent)
+				dfs(child, node);
+	}
+public:
+	LCA(const vector<vector<int>>& _adj, int root) :
+		root(root), adj(_adj) {
+		adj = _adj;
+		n = adj.size() - 1;
+		logN = log2(n);
+		lca = vector<vector<int>>(n + 1, vector<int>(logN + 1, -1));
+		depth = vector<int>(n + 1);
+		dfs(root, -1);
+	}
+	// return first = LCA,second = distance between the two nodes
+	pair<int, int> get_LCA(int u, int v) {
+		if (depth[u] < depth[v])
+			swap(u, v);
+		int dis = 0;
+		for (int k = logN; k >= 0; k--)
+			if (depth[u] - (1 << k) >= depth[v])
+				u = lca[u][k], dis += (1 << k);
+		if (u == v)
+			return { u,dis };
+		for (int k = logN; k >= 0; k--) {
+			if (lca[u][k] != lca[v][k]) {
+				u = lca[u][k];
+				v = lca[v][k];
+				dis += (1 << k + 1);
+			}
+		}
+		return { lca[u][0],dis + 2 };
+	}
+};
