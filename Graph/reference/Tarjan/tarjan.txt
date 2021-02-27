@@ -1,0 +1,54 @@
+int n, m,timer;
+vector<vector<int>>g,comps;
+vector<int>dfn, low,stk,instack,cost,comp;
+
+void init(int n) {
+	g = vector<vector<int>>(n+1);
+	cost = dfn = low = instack = comp = vector<int>(n + 1);
+}
+void SCC(int u) {
+	dfn[u] = low[u] = ++timer;
+	instack[u] = 1;
+	stk.push_back(u);
+	for (auto child : g[u]) {
+		if (!dfn[child]){//Not visitied
+			SCC(child);
+			// minimize ancestors of my child 
+			low[u] = min(low[u], low[child]);
+		}
+		else if (instack[child]) { // visited in stack cycle 
+			low[u] = min(low[u], dfn[child]); // you can minimize on dfsn
+									// it is useful in art point ^^
+		}
+	}
+	if (low[u] == dfn[u]) {
+		comps.push_back(vector<int>());
+		int x = -1;
+		while (x != u) {
+			x = stk.back(); stk.pop_back(); instack[x] = 0;
+			comps.back().push_back(x);
+			comp[x] = sz(comps) - 1;
+		}
+	}
+
+}
+int main() {
+	file();
+	cin >> n;
+	init(n);
+	for (int i = 1; i <= n; i++)cin >> cost[i];
+	cin >> m;
+	while (m--) {
+		int u, v; cin >> u >> v;
+		g[u].push_back(v);
+	}
+	for (int i = 1; i <= n; i++)if(!dfn[i])SCC(i);
+		
+	ll sum = 0,ways=1;
+	map<int, int>mp;
+	for (int i=0;i<sz(comps);i++){
+		int mn = 1e9;
+		for (auto tt : comps[i])mn = min(mn, cost[tt]);
+		for (auto tt : comps[i])if (cost[tt] == mn)mp[i]++;
+		sum += mn;
+	}
