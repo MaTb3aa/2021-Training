@@ -14,7 +14,7 @@ void sieve() {
         }
     }
 }
-int findDiv(int x) {  //order sive();
+int findDiv(int x) {  //order prime fact
     map<int, int>mp;
     while (x != 1) {
         mp[spf[x]]++;
