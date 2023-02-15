@@ -1,4 +1,7 @@
-void generate() {
+const int N = 1e7;
+bool seive[N];
+vector<int>primes;
+oid generate() {
 	memset(sieve, 1, sizeof sieve);
 	sieve[0] = sieve[1] = 0;
 	for (int i = 4; i < N; i += 2)
